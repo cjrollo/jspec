@@ -1,0 +1,42 @@
+FROM openjdk:8u102-jdk
+MAINTAINER rollo
+# Usage: docker run -it rollo/java8.102 bash
+# Usage: docker run  -v $(pwd)/src:/home/demo -it rollo/java8.102 bash
+
+#TODO run all this as non-root
+#TODO Commit scripts
+#TODO Commit dockerfile
+#TODO Build multi-step demo in the spec
+
+# Move to our test directory
+WORKDIR /home/demo
+
+# NOT Needed if we mount from local volume
+# Create project directory
+# RUN mkdir demo
+# WORKDIR demo
+# lib is where jruby and any other supporting jars go
+# RUN mkdir lib
+# bin is where bundler creates binstubs for rspec etc.
+# RUN mkdir bin
+# local gem directory
+# RUN mkdir gem_home
+# the test files go into the spec folder
+# RUN mkdir spec
+# get jruby-complete.jar and download to lib
+# ENV JRUBY_VERSION=1.7.19
+# RUN curl -o "lib/jruby-complete-$JRUBY_VERSION.jar" "https://s3.amazonaws.com/jruby.org/downloads/$JRUBY_VERSION/jruby-complete-$JRUBY_VERSION.jar"
+
+# Install Bundler
+CMD ./init.sh    #not needed?
+# Install Gems
+CMD ./install.sh #not needed?
+
+# Fetch some code to test
+#RUN curl -o code/commons-lang3-3.3.2-bin.tar.gz https://archive.apache.org/dist/commons/lang/binaries/commons-lang3-3.3.2-bin.tar.gz
+#RUN tar -xzf code/commons-lang3-3.3.2-bin.tar.gz -C code
+
+# Run all the specifications
+ENTRYPOINT ["./rspec.sh", "--format", "doc"]
+
+#TODO: switch to /home/demo and run rspec command

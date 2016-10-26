@@ -1,0 +1,15 @@
+FROM openjdk:8u92-jdk-alpine
+MAINTAINER rollo
+# Usage: docker run -it rollo/jalpine892 ash
+
+# Update the system
+RUN apk update
+
+#TODO install curl
+
+#TODO install bash
+RUN apk add bash
+
+#TODO install vim
+
+#ENTRYPOINT [/bin/ash]
