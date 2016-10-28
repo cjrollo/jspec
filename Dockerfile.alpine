@@ -1,15 +1,32 @@
 FROM openjdk:8u92-jdk-alpine
 MAINTAINER rollo
-# Usage: docker run -it rollo/jalpine892 ash
+# Usage: docker run -it --rm -v $(pwd)/demo:/home/demo rollo/jspec:jalpine892
 
-# Update the system
+# Step 2: install an editor
 RUN apk update
+RUN apk add vim   # and why not? ;-)
 
-#TODO install curl
+# Step 3: install jRuby
+RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
+RUN apk update
+RUN apk add jruby
+# install optional subpackages, if you need them
+#RUN apk add jruby-irb jruby-maven jruby-minitest jruby-rdoc jruby-rake jruby-testunit
 
-#TODO install bash
-RUN apk add bash
+# Step 4: validate the jRuby install
+RUN jruby -v
 
-#TODO install vim
+## To dive into BDD/TDD, using Rspec with jRuby, check out this post:
+## http://www.tweakstreet.io/blog/2015/2/9/using-standalone-jruby-and-rspec-to-test-your-java-projects
+## What follows is a "manual" setup
+# Step 5: install Rspec
+RUN jruby -S gem install rspec
 
-#ENTRYPOINT [/bin/ash]
+# Step 6: validate the Rspec install
+RUN jruby -S rspec
+
+# Step 7: create a non-root user
+RUN adduser -D 'dev' # WARNING: the -D flag creates a user without a password
+
+# Default entrypoint
+CMD /bin/ash
